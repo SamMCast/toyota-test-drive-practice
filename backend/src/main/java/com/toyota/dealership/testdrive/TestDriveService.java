@@ -14,13 +14,17 @@ public class TestDriveService {
     }
 
     public List<TestDriveResponse> getTestDrives(String search) {
-        if (search != null && !search.isEmpty()) {
-            TestDrive response =  repository.findByCustomerNameContainingIgnoreCaseOrVehicleModelContainingIgnoreCase(search, search);
+        List<TestDrive> testDrives;
+
+        if (search != null && !search.isBlank()) {
+            String trimmedSearch = search.trim();
+            
+            testDrives = repository.findByCustomerNameContainingIgnoreCaseOrVehicleModelContainingIgnoreCase(trimmedSearch, trimmedSearch);
         }
         else{
-            
+            testDrives = repository.findAll();
         }
-        return repository.findAll()
+        return testDrives
                 .stream()
                 .map(this::toResponse)
                 .toList();

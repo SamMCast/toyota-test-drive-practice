@@ -26,7 +26,7 @@ public class TestDriveController {
     }
 
     @GetMapping
-    public List<TestDriveResponse> getTestDrives(@RequestParam String search) {
+    public List<TestDriveResponse> getTestDrives(@RequestParam(required = false) String search) {
         return service.getTestDrives(search);
     }
 
