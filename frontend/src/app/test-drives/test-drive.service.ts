@@ -13,7 +13,13 @@ export class TestDriveService {
 
   private readonly apiUrl = '/api/test-drives';
 
-  getTestDrives(): Observable<TestDrive[]> {
+  getTestDrives(search?: string): Observable<TestDrive[]> {
+    if (search !== undefined) {
+      return this.http.get<TestDrive[]>(this.apiUrl, {
+        params: { search }
+      });
+    }
+
     return this.http.get<TestDrive[]>(this.apiUrl);
   }
 }

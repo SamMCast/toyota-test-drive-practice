@@ -25,12 +25,12 @@ export class TestDrivesComponent implements OnInit {
     this.loadTestDrives();
   }
 
-  loadTestDrives(): void {
+  loadTestDrives(search?: string): void {
     this.isLoading = true;
     this.errorMessage = '';
 
     this.testDriveService
-      .getTestDrives()
+      .getTestDrives(search)
       .subscribe({
         next: testDrives => {
           this.testDrives = testDrives;
@@ -43,5 +43,9 @@ export class TestDrivesComponent implements OnInit {
           this.isLoading = false;
         }
       });
+  }
+
+  onSearch(search: string): void {
+    this.loadTestDrives(search);
   }
 }

@@ -1,6 +1,19 @@
-<h1>Test Drive Appointments</h1>
+<h1>Toyota Test Drive Scheduler</h1>
 
-<p>Total appointments: {{ testDrives.length }}</p>
+<div>
+  <label for="search">Search:</label>
+
+  <input
+    id="search"
+    type="text"
+    #searchInput
+    placeholder="Customer name or vehicle model"
+  />
+
+  <button (click)="onSearch(searchInput.value)">
+    Search
+  </button>
+</div>
 
 @if (isLoading) {
   <p>Loading test drives...</p>
@@ -10,14 +23,11 @@
   <p>{{ errorMessage }}</p>
 }
 
-@if (!isLoading && !errorMessage && testDrives.length === 0) {
-  <p>No test drives scheduled.</p>
-}
+@if (!isLoading && !errorMessage) {
 
-@if (!isLoading && !errorMessage && testDrives.length > 0) {
+  <p>Total test drives: {{ testDrives.length }}</p>
 
   <table>
-
     <thead>
       <tr>
         <th>Customer</th>
@@ -30,9 +40,7 @@
     </thead>
 
     <tbody>
-
       @for (testDrive of testDrives; track testDrive.id) {
-
         <tr>
           <td>{{ testDrive.customerName }}</td>
           <td>{{ testDrive.vehicleModel }}</td>
@@ -41,10 +49,7 @@
           <td>{{ testDrive.durationMinutes }} minutes</td>
           <td>{{ testDrive.notes }}</td>
         </tr>
-
       }
-
     </tbody>
-
   </table>
 }
