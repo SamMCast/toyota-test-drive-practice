@@ -1,0 +1,50 @@
+<h1>Test Drive Appointments</h1>
+
+<p>Total appointments: {{ testDrives.length }}</p>
+
+@if (isLoading) {
+  <p>Loading test drives...</p>
+}
+
+@if (errorMessage) {
+  <p>{{ errorMessage }}</p>
+}
+
+@if (!isLoading && !errorMessage && testDrives.length === 0) {
+  <p>No test drives scheduled.</p>
+}
+
+@if (!isLoading && !errorMessage && testDrives.length > 0) {
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Vehicle</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Duration</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (testDrive of testDrives; track testDrive.id) {
+
+        <tr>
+          <td>{{ testDrive.customerName }}</td>
+          <td>{{ testDrive.vehicleModel }}</td>
+          <td>{{ testDrive.appointmentDate }}</td>
+          <td>{{ testDrive.appointmentTime }}</td>
+          <td>{{ testDrive.durationMinutes }} minutes</td>
+          <td>{{ testDrive.notes }}</td>
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+}
