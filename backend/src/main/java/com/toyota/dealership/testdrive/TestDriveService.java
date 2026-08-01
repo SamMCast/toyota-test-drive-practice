@@ -1,6 +1,7 @@
 package com.toyota.dealership.testdrive;
 
 import org.springframework.stereotype.Service;
+import com.toyota.dealership.exception.TestDriveNotFoundException;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class TestDriveService {
 
         if (search != null && !search.isBlank()) {
             String trimmedSearch = search.trim();
-            
+
             testDrives = repository.findByCustomerNameContainingIgnoreCaseOrVehicleModelContainingIgnoreCase(trimmedSearch, trimmedSearch);
         }
         else{
@@ -42,6 +43,13 @@ public class TestDriveService {
 
         TestDrive savedTestDrive = repository.save(testDrive);
         return toResponse(savedTestDrive);
+    }
+
+    public void cancelTestDriveAppointment(Long id) {
+        TestDrive testDrive = repository.findById(id)
+                .orElseThrow(() -> new TestDriveNotFoundException(id));
+
+        repository.delete(testDrive);
     }
 
     private TestDriveResponse toResponse(TestDrive testDrive) {

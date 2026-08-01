@@ -22,4 +22,8 @@ export class TestDriveService {
 
     return this.http.get<TestDrive[]>(this.apiUrl);
   }
+
+  cancelTestDriveAppointment(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

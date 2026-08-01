@@ -36,6 +36,7 @@
         <th>Time</th>
         <th>Duration</th>
         <th>Notes</th>
+        <th>Actions</th>
       </tr>
     </thead>
 
@@ -48,6 +49,11 @@
           <td>{{ testDrive.appointmentTime }}</td>
           <td>{{ testDrive.durationMinutes }} minutes</td>
           <td>{{ testDrive.notes }}</td>
+          <td>
+            <button (click)="onCancelTestDrive(testDrive.id)">
+              Cancel
+            </button>
+          </td>
         </tr>
       }
     </tbody>

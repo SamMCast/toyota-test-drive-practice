@@ -48,4 +48,17 @@ export class TestDrivesComponent implements OnInit {
   onSearch(search: string): void {
     this.loadTestDrives(search);
   }
+
+  onCancelTestDrive(id: number): void {
+    this.testDriveService
+      .cancelTestDriveAppointment(id)
+      .subscribe({
+        next: () => {
+          this.testDrives = this.testDrives.filter(testDrive => testDrive.id !== id);
+        },
+        error: () => {
+          this.errorMessage = 'Unable to cancel test drive appointment.';
+        }
+      });
+    }
 }
