@@ -1,5 +1,77 @@
 <h1>Toyota Test Drive Scheduler</h1>
 
+<h2>Schedule Test Drives</h2>
+<div class="create-form-section">
+<form #createForm="ngForm" (ngSubmit)="scheduleTestDrive(createForm)">
+  <div>
+    <label for="customerName">Customer Name:</label>
+    <input
+      id="customerName"
+      name="customerName"
+      type="text"
+      minlength="3"
+      ngModel
+      required
+    />
+  </div>
+
+  <div>
+    <label for="vehicleModel">Vehicle Model:</label>
+    <input
+      id="vehicleModel"
+      name="vehicleModel"
+      type="text"
+      ngModel
+      required
+    />
+  </div>
+
+  <div>
+    <label for="appointmentDate">Appointment Date:</label>
+    <input
+      id="appointmentDate"
+      name="appointmentDate"
+      type="date"
+      ngModel
+      required
+    />
+  </div>
+
+  <div>
+    <label for="appointmentTime">Appointment Time:</label>
+    <input
+      id="appointmentTime"
+      name="appointmentTime"
+      type="time"
+      ngModel
+      required
+    />
+  </div>
+
+  <div>
+    <label for="durationMinutes">Duration (minutes):</label>
+    <input
+      id="durationMinutes"
+      name="durationMinutes"
+      type="number"
+      min="15"
+      ngModel
+      required
+    />
+  </div>
+
+  <div>
+    <label for="notes">Notes:</label>
+    <textarea id="notes" name="notes" ngModel></textarea>
+  </div>
+
+  <button type="submit" [disabled]="createForm.invalid">
+    Schedule Test Drive
+  </button>
+
+</form>
+</div>
+
 <div>
   <label for="search">Search:</label>
 
@@ -45,14 +117,46 @@
         <tr>
           <td>{{ testDrive.customerName }}</td>
           <td>{{ testDrive.vehicleModel }}</td>
-          <td>{{ testDrive.appointmentDate }}</td>
-          <td>{{ testDrive.appointmentTime }}</td>
+
+          @if (editingTestDriveId === testDrive.id) {
+            <td>
+              <input
+                type="date"
+                [(ngModel)]="rescheduleDate"
+              />
+            </td>
+
+            <td>
+              <input
+                type="time"
+                [(ngModel)]="rescheduleTime"
+              />
+            </td>
+          } @else {
+            <td>{{ testDrive.appointmentDate }}</td>
+            <td>{{ testDrive.appointmentTime }}</td>
+          }
+
           <td>{{ testDrive.durationMinutes }} minutes</td>
           <td>{{ testDrive.notes }}</td>
+
           <td>
-            <button (click)="onCancelTestDrive(testDrive.id)">
-              Cancel
-            </button>
+            @if (editingTestDriveId === testDrive.id) {
+              <button (click)="saveReschedule(testDrive.id)">
+                Save
+              </button>
+              <button (click)="cancelReschedule()">
+                Cancel Edit
+              </button>
+            } @else {
+              <button (click)="startReschedule(testDrive)">
+                Reschedule
+              </button>
+
+              <button (click)="onCancelTestDrive(testDrive.id)">
+                Cancel
+              </button>
+            }
           </td>
         </tr>
       }

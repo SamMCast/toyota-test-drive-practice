@@ -2,6 +2,7 @@ package com.toyota.dealership.testdrive;
 
 import org.springframework.stereotype.Service;
 import com.toyota.dealership.exception.TestDriveNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,6 +51,17 @@ public class TestDriveService {
                 .orElseThrow(() -> new TestDriveNotFoundException(id));
 
         repository.delete(testDrive);
+    }
+
+    @Transactional
+    public TestDriveResponse rescheduleTestDriveAppointment(Long id, RescheduleTestDriveRequest request) {
+        TestDrive testDrive = repository.findById(id)
+                .orElseThrow(() -> new TestDriveNotFoundException(id));
+
+        testDrive.setAppointmentDate(request.appointmentDate());
+        testDrive.setAppointmentTime(request.appointmentTime());
+
+        return toResponse(testDrive);
     }
 
     private TestDriveResponse toResponse(TestDrive testDrive) {

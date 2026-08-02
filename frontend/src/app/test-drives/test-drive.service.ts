@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { TestDrive } from './test-drive.model';
+import { TestDrive, RescheduleTestDriveRequest, CreateTestDriveRequest } from './test-drive.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,4 +26,13 @@ export class TestDriveService {
   cancelTestDriveAppointment(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  rescheduleTestDriveAppointment(id: number, request: RescheduleTestDriveRequest): Observable<TestDrive> {
+    return this.http.patch<TestDrive>(`${this.apiUrl}/${id}/schedule`, request);
+  }
+
+  scheduleTestDrive(request: CreateTestDriveRequest): Observable<TestDrive> {
+    return this.http.post<TestDrive>(this.apiUrl, request);
+  }
+
 }

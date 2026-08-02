@@ -71,4 +71,12 @@ public class TestDrive {
     public String getNotes() {
         return notes;
     }
+
+    public void setAppointmentDate(LocalDate appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public void setAppointmentTime(LocalTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
 }

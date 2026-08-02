@@ -2,6 +2,7 @@ package com.toyota.dealership.testdrive;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,5 +47,15 @@ public class TestDriveController {
     public ResponseEntity<Void> cancelTestDriveAppointment(@PathVariable Long id) {
         service.cancelTestDriveAppointment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/schedule")
+    public ResponseEntity<TestDriveResponse> rescheduleTestDriveAppointment(
+            @PathVariable Long id,
+            @Valid @RequestBody RescheduleTestDriveRequest request) {
+
+        TestDriveResponse response = service.rescheduleTestDriveAppointment(id, request);
+
+        return ResponseEntity.ok(response);
     }
 }

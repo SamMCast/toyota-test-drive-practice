@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-
-import { TestDrive } from './test-drive.model';
+import {FormsModule, NgForm} from '@angular/forms';
+import {CreateTestDriveRequest, RescheduleTestDriveRequest, TestDrive } from './test-drive.model';
 import { TestDriveService } from './test-drive.service';
+
 
 @Component({
   selector: 'app-test-drives',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './test-drives.component.html',
   styleUrl: './test-drives.component.scss'
 })
@@ -20,6 +21,11 @@ export class TestDrivesComponent implements OnInit {
   isLoading = true;
 
   errorMessage = '';
+
+  editingTestDriveId: number | null = null;
+  
+  rescheduleDate = '';
+  rescheduleTime = '';
 
   ngOnInit(): void {
     this.loadTestDrives();
@@ -61,4 +67,65 @@ export class TestDrivesComponent implements OnInit {
         }
       });
     }
+
+    startReschedule(testDrive: TestDrive): void {
+      this.editingTestDriveId = testDrive.id;
+      this.rescheduleDate = testDrive.appointmentDate;
+      this.rescheduleTime = testDrive.appointmentTime;
+    }
+
+    cancelReschedule(): void {
+      this.editingTestDriveId = null;
+      this.rescheduleDate = '';
+      this.rescheduleTime = '';
+    }
+
+    saveReschedule(id: number): void {
+
+      const request: RescheduleTestDriveRequest = {
+        appointmentDate: this.rescheduleDate,
+        appointmentTime: this.rescheduleTime
+      };
+
+      this.testDriveService.rescheduleTestDriveAppointment(id, request).subscribe({
+        next: (updatedTestDrive) => {
+          this.testDrives = this.testDrives.map(testDrive =>
+            testDrive.id === updatedTestDrive.id
+              ? updatedTestDrive
+              : testDrive
+          );
+
+          this.cancelReschedule();
+        },
+        error: () => {
+          this.errorMessage = 'Unable to reschedule test drive appointment.';
+        }
+
+      });
+    }
+
+    scheduleTestDrive(form: NgForm): void {
+      if (form.invalid) {
+        return;
+      }
+      const request: CreateTestDriveRequest = {
+        customerName: form.value.customerName,
+        vehicleModel: form.value.vehicleModel,
+        appointmentDate: form.value.appointmentDate,
+        appointmentTime: form.value.appointmentTime,
+        durationMinutes: form.value.durationMinutes,
+        notes: form.value.notes
+      };
+
+      this.testDriveService.scheduleTestDrive(request).subscribe({
+        next: (newTestDrive) => {
+          this.testDrives = [...this.testDrives, newTestDrive];
+          form.reset();
+        },
+        error: () => {
+          this.errorMessage = 'Unable to schedule test drive.';
+        }
+      });
+    }
+
 }
